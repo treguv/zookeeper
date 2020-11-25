@@ -11,7 +11,10 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 //parse incoming json data
 app.use(express.json()); //Use puts a functio non our server that our data has to pass through
-
+//For serving static pages
+//Public is replaced with the path in server to where all your sttatic stuff is
+//THis is another api path
+app.use(express.static("public")); // allows the requests for css and such from the main file
 //filter responses to be sent based on queries
 function filterByQuery(query, animalsArray) {
   let personalityTraitsArray = [];
@@ -102,6 +105,21 @@ app.get("/api/animals/:id", (req, res) => {
   } else {
     res.send(404);
   }
+});
+
+//Serve up index.html
+app.get("/", (req, res) => {
+  // / is the root directory for the server
+  res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
+//server up animals.html
+app.get("/animals", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/animals.html"));
+});
+//server up zookeepers.html
+app.get("/zookeepers", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/zookeepers.html"));
 });
 /*
 req.query is multifaceted, 
